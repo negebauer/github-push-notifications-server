@@ -1,0 +1,9 @@
+{
+  "name": "github-push-notifications-server",
+  "version": "0.0.1",
+  "description": "A server for fetching github notifications and sending push notifications",
+  "main": "index.js",
+  "repository": "https://github.com/negebauer/github-push-notifications-server",
+  "author": "negebauer <negebauerm@gmail.com>",
+  "license": "MIT"
+}
