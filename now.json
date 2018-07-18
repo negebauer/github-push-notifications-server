@@ -3,6 +3,6 @@
   "alias": "github-push-notifications-server.now.sh",
   "type": "npm",
   "engines": {
-    "node": "9.2.0"
+    "node": "8.11.3"
   }
 }
