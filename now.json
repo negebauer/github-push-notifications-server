@@ -1,0 +1,8 @@
+{
+  "name": "github-push-notifications-server",
+  "alias": "github-push-notifications-server.now.sh",
+  "type": "npm",
+  "engines": {
+    "node": "9.2.0"
+  }
+}
