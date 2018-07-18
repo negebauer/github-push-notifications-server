@@ -4,5 +4,11 @@
   "type": "npm",
   "engines": {
     "node": "8.11.3"
+  },
+  "env": {
+    "DB_USER": "@github-push-notifications-server-db-user",
+    "DB_PASSWORD": "@github-push-notifications-server-db-password",
+    "DB_HOST": "@github-push-notifications-server-db-host",
+    "DB_NAME": "@github-push-notifications-server-db-name"
   }
 }
