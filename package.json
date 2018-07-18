@@ -6,6 +6,9 @@
   "repository": "https://github.com/negebauer/github-push-notifications-server",
   "author": "negebauer <negebauerm@gmail.com> (https://negebauer.com)",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
