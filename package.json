@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "https://github.com/negebauer/github-push-notifications-server",
   "author": "negebauer <negebauerm@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.5.2"
+  }
 }
