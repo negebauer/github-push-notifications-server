@@ -7,6 +7,10 @@
   "author": "negebauer <negebauerm@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "koa": "^2.5.2"
+    "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-cors": "^0.0.16",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0"
   }
 }
