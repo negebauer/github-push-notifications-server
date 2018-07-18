@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
+    "dev": "nodemon index.js",
     "deploy": "now --public && now alias"
   },
   "dependencies": {
@@ -17,5 +18,8 @@
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "mongoose": "^5.2.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
   }
 }
