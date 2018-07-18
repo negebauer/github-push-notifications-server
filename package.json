@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "deploy": "now --public && now alias"
+    "deploy": "echo y | now rm github-push-notifications-server; now --public && now alias"
   },
   "dependencies": {
     "koa": "^2.5.2",
