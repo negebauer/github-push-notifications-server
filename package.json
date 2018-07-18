@@ -4,7 +4,7 @@
   "description": "A server for fetching github notifications and sending push notifications",
   "main": "index.js",
   "repository": "https://github.com/negebauer/github-push-notifications-server",
-  "author": "negebauer <negebauerm@gmail.com>",
+  "author": "negebauer <negebauerm@gmail.com> (https://negebauer.com)",
   "license": "MIT",
   "dependencies": {
     "koa": "^2.5.2",
