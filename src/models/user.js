@@ -9,11 +9,10 @@ const Device = new Schema({
 const model = 'user'
 const UserSchema = new Schema({
   devices: [Device],
-  accessToken: String,
-  email: {
-    type: String,
-    unique: true,
-  },
+  token: String,
+  name: String,
+  email: String,
+  avatarUrl: String,
   username: {
     type: String,
     unique: true,
