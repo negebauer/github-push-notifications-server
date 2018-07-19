@@ -12,6 +12,7 @@
     "deploy": "now rm -y github-push-notifications-server; now --public && now alias"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
     "koa-cors": "^0.0.16",
