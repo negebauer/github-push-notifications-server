@@ -5,8 +5,8 @@ mongoose.Promise = global.Promise
 
 const URI = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
 
-const start = uri => {
-  const mongoUri = uri || process.env.MONGO || `${URI}`
+function setupDb() {
+  const mongoUri = process.env.MONGO || `${URI}`
   mongoose.connect(mongoUri, { useNewUrlParser: true })
   const db = mongoose.connection
   db.on('connected', () => console.log('[MONGO] Connected')); // eslint-disable-line no-console
@@ -18,6 +18,4 @@ const start = uri => {
   return db
 }
 
-const disconnect = () => mongoose.disconnect()
-
-module.exports = { start, disconnect }
+module.exports = setupDb

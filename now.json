@@ -9,6 +9,10 @@
     "DB_USER": "@github-push-notifications-server-db-user",
     "DB_PASSWORD": "@github-push-notifications-server-db-password",
     "DB_HOST": "@github-push-notifications-server-db-host",
-    "DB_NAME": "@github-push-notifications-server-db-name"
+    "DB_NAME": "@github-push-notifications-server-db-name",
+    "REDIS_HOST": "@github-push-notifications-server-redis-host",
+    "REDIS_PORT": "@github-push-notifications-server-redis-port",
+    "REDIS_PASSWORD": "@github-push-notifications-server-redis-password",
+    "REDIS_NAME": "@github-push-notifications-server-redis-name"
   }
 }
