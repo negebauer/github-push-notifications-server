@@ -82,9 +82,11 @@ async function processFetchNotifications(job, done) {
       repository: { name, full_name: fullName },
       subject: { title, url, latest_comment_url, type },
       reason,
-      url: notificationThreadUrl,
+      // url: notificationThreadUrl,
     } = notification
-    console.log('notification', { name, title, type, reason });
+    const isNewIssueOrPr = url === latest_comment_url
+    const isComment = !isNewIssueOrPr
+    console.log('notification', { name, fullName, title, type, reason, isNewIssueOrPr, url });
     // console.log('notification', { name, fullName, title, url, latest_comment_url, type, reason, notificationThreadUrl });
   })
   console.log('[JOB] Notifications', notifications.length)
