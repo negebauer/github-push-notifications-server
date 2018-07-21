@@ -17,6 +17,7 @@ const UserSchema = new Schema({
     type: String,
     unique: true,
   },
+  jobId: String,
 })
 
 UserSchema.methods = {}

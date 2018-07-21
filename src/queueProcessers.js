@@ -15,8 +15,8 @@ queue.process(FETCH_NOTIFICATIONS, 10, processFetchNotifications)
 createMissingFetchNotificationsJobs()
 
 function forceStart(err, ids) {
-  ids.forEach( function( id ) {
-    kue.Job.get( id, function( err, job ) {
+  ids.forEach(id => {
+    kue.Job.get(id, (err, job) => {
       job.inactive();
     })
   })

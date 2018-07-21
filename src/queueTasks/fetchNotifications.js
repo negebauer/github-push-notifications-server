@@ -1,27 +1,43 @@
 const axios = require('axios')
 const { QUEUE_JOBS: { FETCH_NOTIFICATIONS } } = require('../constants')
 const User = require('../models/user')
+const { getJob } = require('../helpers/queue')
 const { createJob } = require('./index')
 
-function createFirstFetchNotifications(username) {
-  // TODO: How to make sure that there's only one job for each user?
-  return createFetchNotifications(username)
+/**
+ *  Called when a user performs a login. Decides
+ *  if it should create a fetchNotifications task.
+ *  @author @negebauer
+ */
+async function checkFetchNotifications(user) {
+  const { jobId } = user
+  if (!jobId) return createFetchNotifications(user)
+  try {
+    const job = await getJob(jobId)
+    job.inactive()
+  } catch (err) {
+    if (err.message !== `job "${jobId}" doesnt exist`) {
+      return console.error('[ERR] checkFetchNotifications', err);
+    }
+    createFetchNotifications(user)
+  }
 }
 
 /**
  *  Creates a new fetchNotifications job
  *  if the user doesn't have one already
  *  @author @negebauer
- *  @param  {[type]}  user        An instance of the user
- *  @param  {Object}  [params={}] Extra params like delay and lastModified
+ *  @param  {Object}  [params={}] Extra params { delay, lastModified }
  */
-async function createFetchNotifications(username, params = {}) {
+async function createFetchNotifications(user, params = {}) {
+  const { username } = user
   const { delay = 1000 * 60, lastModified } = params
   const job = await createJob(
     FETCH_NOTIFICATIONS,
     { username, lastModified, title: username },
     { delay },
   )
+  await user.update({ jobId: job.id })
   return job
 }
 
@@ -31,7 +47,7 @@ function rescheduleFetchNotifications(user, responseHeaders) {
     'last-modified': lastModified,
   } = responseHeaders
   const delay = delaySeconds * 1000
-  createFetchNotifications(user.username, { delay, lastModified })
+  createFetchNotifications(user, { delay, lastModified })
 }
 
 /**
@@ -79,8 +95,7 @@ async function createMissingFetchNotificationsJobs() {
 }
 
 module.exports = {
-  createFirstFetchNotifications,
-  createFetchNotifications,
+  checkFetchNotifications,
   processFetchNotifications,
   createMissingFetchNotificationsJobs
 }
