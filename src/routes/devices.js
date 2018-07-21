@@ -10,11 +10,18 @@ router.get('/', ctx => {
   }
 })
 
-router.post('/', ctx => {
-  return ctx.body = {
-    message: 'NOT_IMPLEMENTED',
+router.post('/', async ctx => {
   const { user } = ctx.state
+  const { body } = ctx.request
+  let device = user.devices.filter(device => device.uid === body.uid)[0]
+  if (!device) {
+    device = user.devices.create(body)
+    user.devices.push(device)
+  } else {
+    _.merge(device, body)
   }
+  await user.save()
+  return ctx.body = device
 })
 
 router.delete('/:id', ctx => {
