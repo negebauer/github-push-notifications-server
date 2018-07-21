@@ -3,6 +3,11 @@ const { QUEUE_JOBS: { FETCH_NOTIFICATIONS } } = require('../constants')
 const User = require('../models/user')
 const { createJob } = require('./index')
 
+function createFirstFetchNotifications(username) {
+  // TODO: How to make sure that there's only one job for each user?
+  return createFetchNotifications(username)
+}
+
 /**
  *  Creates a new fetchNotifications job
  *  if the user doesn't have one already
@@ -11,23 +16,22 @@ const { createJob } = require('./index')
  *  @param  {Object}  [params={}] Extra params like delay and lastModified
  */
 async function createFetchNotifications(username, params = {}) {
-  const { delay = 1000 * 1, lastModified } = params
+  const { delay = 1000 * 60, lastModified } = params
   const job = await createJob(
     FETCH_NOTIFICATIONS,
     { username, lastModified, title: username },
-    { delay, removeOnComplete: false },
+    { delay },
   )
   return job
 }
 
-async function rescheduleFetchNotifications(user, responseHeaders) {
+function rescheduleFetchNotifications(user, responseHeaders) {
   const {
     'x-poll-interval': delaySeconds,
     'last-modified': lastModified,
   } = responseHeaders
   const delay = delaySeconds * 1000
-  const { id: jobId } = await createFetchNotifications(user.username, { delay, lastModified })
-  await user.update({ jobId: jobId })
+  createFetchNotifications(user.username, { delay, lastModified })
 }
 
 /**
@@ -35,11 +39,9 @@ async function rescheduleFetchNotifications(user, responseHeaders) {
  *  @author @negebauer
  */
 async function processFetchNotifications(job, done) {
-  console.log('[JOB] Process');
   // Retrieve data
   const { username, lastModified: ifModifiedSince } = job.data
   const user = await User.findOne({ username })
-  await user.update({ jobId: undefined })
 
   // Call github notifications api and reschedule next fetch
   const notificationsUrl = `https://api.github.com/notifications?access_token=${user.token}`
@@ -76,4 +78,9 @@ async function createMissingFetchNotificationsJobs() {
   // TODO: Create a job for each user that doesn't have one
 }
 
-module.exports = { createFetchNotifications, processFetchNotifications, createMissingFetchNotificationsJobs }
+module.exports = {
+  createFirstFetchNotifications,
+  createFetchNotifications,
+  processFetchNotifications,
+  createMissingFetchNotificationsJobs
+}

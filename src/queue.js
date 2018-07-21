@@ -13,9 +13,6 @@ const redisConfig = {
 
 const queue = kue.createQueue(redisConfig)
 queue.watchStuckJobs(1000 * 10)
-queue.on('ready', () => console.log('[REDIS] Queue ready'))
-queue.on('job enqueue', (id, type) => console.log('[KUE] Job queued', id, type))
-queue.on('job complete', (id, result) => console.log('[KUE] Job completed', id))
 queue.on('error', err => console.log('[REDIS] Connection error:', err))
 
 function queueShutdown() {
