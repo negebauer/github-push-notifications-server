@@ -13,5 +13,6 @@ module.exports = {
   QUEUE_JOBS: {
     FETCH_NOTIFICATIONS: 'fetchNotifications',
   },
-  
+
+  jobDoesntExistMsg: jobId => `job "${jobId}" doesnt exist`
 }

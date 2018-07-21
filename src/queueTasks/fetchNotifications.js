@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { QUEUE_JOBS: { FETCH_NOTIFICATIONS } } = require('../constants')
+const { QUEUE_JOBS: { FETCH_NOTIFICATIONS }, jobDoesntExistMsg } = require('../constants')
 const User = require('../models/user')
 const { getJob } = require('../helpers/queue')
 const { createJob } = require('./index')
@@ -91,7 +91,19 @@ async function processFetchNotifications(job, done) {
 }
 
 async function createMissingFetchNotificationsJobs() {
-  // TODO: Create a job for each user that doesn't have one
+  const users = await User.find()
+  return Promise.all(users.map(async user => {
+    const { jobId, token } = user
+    if (!jobId && !token) return
+    else if (!jobId && token) return createFetchNotifications(user)
+    else {
+      try {
+        await getJob(jobId)
+      } catch (err) {
+        if (err.message === jobDoesntExistMsg(jobId)) return createFetchNotifications(user)
+      }
+    }
+  }))
 }
 
 module.exports = {
