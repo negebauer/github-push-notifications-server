@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "deploy": "now rm -y github-push-notifications-server; now --public && now alias"
+    "deploy": "now rm -y github-push-notifications-server; now --public && now alias",
+    "kue-ui": "kue-dashboard -p 3001 -r redis://${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}"
   },
   "dependencies": {
     "axios": "^0.18.0",
