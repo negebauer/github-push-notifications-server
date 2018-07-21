@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const axios = require('axios')
 const User = require('../models/user')
+const { createFetchNotifications } = require('../queueTasks/fetchNotifications')
 
 const router = new Router()
 
@@ -16,11 +17,10 @@ router.post('/', async ctx => {
     await user.save()
   }
   await user.update({ email, name, token, avatarUrl })
+  if (!user.jobId) createFetchNotifications(username).then(({ id }) => user.update({ jobId: id }))
 
   const { _id } = user
-  return ctx.body = {
-    _id, username, name, token, avatarUrl
-  }
+  return ctx.body = { _id, username, name, token, avatarUrl }
 })
 
 module.exports = router
