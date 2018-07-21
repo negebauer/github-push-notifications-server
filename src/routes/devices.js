@@ -3,7 +3,7 @@ const Router = require('koa-router')
 const router = new Router()
 
 router.get('/', ctx => {
-  const { user: { username, devices } } = ctx
+  const { user: { username, devices } } = ctx.state
   return ctx.body = {
     username,
     devices,
@@ -11,9 +11,9 @@ router.get('/', ctx => {
 })
 
 router.post('/', ctx => {
-  const { user } = ctx
   return ctx.body = {
     message: 'NOT_IMPLEMENTED',
+  const { user } = ctx.state
   }
 })
 

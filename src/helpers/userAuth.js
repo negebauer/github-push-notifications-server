@@ -26,7 +26,7 @@ async function userAuth(ctx, next) {
   const token = queryAccessToken ? queryAccessToken : headersAccessToken
   try {
     const user = await User.findOne({ token })
-    ctx.user = user
+    ctx.state.user = user
     return next()
   } catch (err) { return unauthorized(ctx, err.message) }
 }
