@@ -10,7 +10,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "deploy": "now rm -y github-push-notifications-server; now --public && now alias",
-    "kue-ui": "kue-dashboard -p 3001 -r redis://${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}"
+    "kue-ui-dev": "kue-dashboard -p 3001",
+    "kue-ui-prod": "kue-dashboard -p 3002 -r redis://${KUE_UI_PASSWORD}@${KUE_UI_HOST}:${KUE_UI_PORT}"
   },
   "dependencies": {
     "axios": "^0.18.0",
