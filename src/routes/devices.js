@@ -24,12 +24,13 @@ router.post('/', async ctx => {
   return ctx.body = device
 })
 
-router.delete('/:id', ctx => {
+router.delete('/:id', async ctx => {
+  const { user } = ctx.state
   const { id } = ctx.params
-  return ctx.body = {
-    message: `NOT_IMPLEMENTED`,
-    deviceId: id,
-  }
+  const device = user.devices.id(id)
+  device.remove()
+  await user.save()
+  return ctx.status = 204
 })
 
 module.exports = router
