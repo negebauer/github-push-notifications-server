@@ -14,12 +14,12 @@ async function checkFetchNotifications(user) {
   if (!jobId) return createFetchNotifications(user)
   try {
     const job = await getJob(jobId)
-    job.inactive()
+    if (job._state !== 'delayed') job.inactive()
   } catch (err) {
-    if (err.message !== `job "${jobId}" doesnt exist`) {
-      return console.error('[ERR] checkFetchNotifications', err);
+    if (err.message === jobDoesntExistMsg(jobId)) {
+      return createFetchNotifications(user)
     }
-    createFetchNotifications(user)
+    return console.error('[ERR] checkFetchNotifications', err);
   }
 }
 
@@ -58,6 +58,7 @@ async function processFetchNotifications(job, done) {
   // Retrieve data
   const { username, lastModified: ifModifiedSince } = job.data
   const user = await User.findOne({ username })
+  if (user.jobId > job.id) return
 
   // Call github notifications api and reschedule next fetch
   const notificationsUrl = `https://api.github.com/notifications?access_token=${user.token}`
