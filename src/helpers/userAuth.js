@@ -1,3 +1,5 @@
+const User = require('../models/user')
+
 /**
  *  Sends an unauthorized error message
  *  @author @negebauer
@@ -17,17 +19,16 @@ function unauthorized(ctx, message = 'Unauthorized.') {
  *  @author @negebauer
  */
 async function userAuth(ctx, next) {
-  const { authorization } = ctx.request.headers
-  const { access_token } = ctx.request.query
-  if (!authorization && !access_token) return unauthorized(ctx)
-  if (access_token) {
-    ctx.token = access_token
+  const { access_token: queryAccessToken } = ctx.request.query
+  const { authorization = '' } = ctx.request.headers
+  const [name, headersAccessToken] = authorization.split(' ')
+  if (!queryAccessToken && !headersAccessToken) return unauthorized(ctx)
+  const token = queryAccessToken ? queryAccessToken : headersAccessToken
+  try {
+    const user = await User.findOne({ token })
+    ctx.user = user
     return next()
-  }
-  const [name, token] = authorization.split(' ')
-  if (!name === 'token' || !token) return unauthorized(ctx, 'Expected Authorization: token <token>')
-  ctx.token = token
-  return next()
+  } catch (err) { return unauthorized(ctx, err.message) }
 }
 
 module.exports = userAuth
