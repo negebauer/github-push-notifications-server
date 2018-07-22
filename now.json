@@ -13,6 +13,7 @@
     "REDIS_HOST": "@github-push-notifications-server-redis-host",
     "REDIS_PORT": "@github-push-notifications-server-redis-port",
     "REDIS_PASSWORD": "@github-push-notifications-server-redis-password",
-    "REDIS_NAME": "@github-push-notifications-server-redis-name"
+    "REDIS_NAME": "@github-push-notifications-server-redis-name",
+    "NODE_ENV": "production"
   }
 }
