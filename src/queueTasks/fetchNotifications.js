@@ -1,4 +1,4 @@
-const axios = require('axios')
+const axios = require('axios').create({ timeout: 5000 })
 const { QUEUE_JOBS: { FETCH_NOTIFICATIONS }, jobDoesntExistMsg } = require('../constants')
 const User = require('../models/user')
 const { getJob } = require('../helpers/queue')
@@ -69,14 +69,22 @@ async function processFetchNotifications(job, done) {
   let response
   try {
     response = await axios(notificationsUrl, { headers: { 'If-Modified-Since': ifModifiedSince || '' } })
+    job.log('headers:', response.headers)
+    job.log('data:', response.data)
   } catch (err) {
-    const headers = { 'last-modified': ifModifiedSince, ...err.response.headers }
     job.progress(JOB_STEPS, JOB_STEPS)
-    if (err.response.status == 304) {
+    const response = err.response || {}
+    const headers = { 'last-modified': ifModifiedSince, ...response.headers = {} }
+    console.log('headers', headers)
+    if (response.status == 304) {
       rescheduleFetchNotifications(user, headers)
       return done()
+    } else if (err.code === 'ECONNABORTED') {
+      rescheduleFetchNotifications(user, headers)
+      return done(err)
     }
     rescheduleFetchNotifications(user, headers)
+    job.log('error:', error)
     return done(err)
   }
   rescheduleFetchNotifications(user, response.headers)
