@@ -10,8 +10,14 @@ const {
 } = require('./constants')
 const { processFetchNotifications, createMissingFetchNotificationsJobs } = require('./queueTasks/fetchNotifications')
 
+const CONCURRENCY = {
+  FETCH_NOTIFICATIONS: 10
+}
+
 // Assign each queue type to it's processer
-queue.process(FETCH_NOTIFICATIONS, 10, processFetchNotifications)
+queue.process(FETCH_NOTIFICATIONS, CONCURRENCY[FETCH_NOTIFICATIONS], processFetchNotifications)
+
+queue.setMaxListeners(Object.values(CONCURRENCY).reduce((i, t) => i + t))
 
 function forceStart(err, ids) {
   return Promise.all(ids.map(async id => {
