@@ -14,6 +14,7 @@
     "kue-ui-prod": "kue-dashboard -p 3002 -r redis://${KUE_UI_PASSWORD}@${KUE_UI_HOST}:${KUE_UI_PORT}"
   },
   "dependencies": {
+    "apn": "^2.2.0",
     "axios": "^0.18.0",
     "keymirror": "^0.1.1",
     "koa": "^2.5.2",
