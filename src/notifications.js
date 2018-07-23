@@ -9,6 +9,7 @@ const {
   IOS_NOTIFICATIONS_PEM_DEVELOPMENT,
   IOS_NOTIFICATIONS_PEM_PRODUCTION,
 } = require('./constants')
+const { messageForNotification, urlForNotification } = require('./helpers/notification')
 
 function loadApnCertificateFromEnv() {
   const rawCert = PRODUCTION
@@ -44,7 +45,7 @@ function notificationApn(alert, payload = {}) {
 }
 
 function notificationGcm() {
-  return {}
+  return Promise.resolve()
 }
 
 // const notificationGcm = (alert, payload = {}) =>
@@ -88,7 +89,7 @@ function notifyDevice(device, alert, payload) {
   const { token, deviceName, systemName } = device
   if (!token) return
   // eslint-disable-next-line no-console
-  console.log('notify', payload.type, token, deviceName)
+  // console.log('notify', payload.type, token, deviceName)
   return systemName === 'iOS'
     ? notifyApn(token, alert, payload)
     : notifyGcm(token, alert, payload)
@@ -111,17 +112,19 @@ async function getDevices(userIds) {
   return flatten(devices)
 }
 
-const type = keyMirror({
+const NOTIFICATION_TYPE = keyMirror({
   NEW_NOTIFICATION: undefined,
 })
 
 const Notification = {
-  newNotification: async (userId, data) => {
-    console.log('data', data);
+  newNotifications: async (userId, notifications) => {
     const devices = await getDevices(userId)
-    const message = 'Nueva notificacion'
-    const payload = { data }
-    return notify(devices, message, payload)
+    return Promise.all[notifications.map(notification => {
+      const message = messageForNotification(notification)
+      const url = urlForNotification(notification)
+      const payload = { url, type: NOTIFICATION_TYPE.NEW_NOTIFICATION }
+      return notify(devices, message, payload)
+    })]
   },
 }
 

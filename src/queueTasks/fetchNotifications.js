@@ -2,6 +2,7 @@ const axios = require('axios')
 const { QUEUE_JOBS: { FETCH_NOTIFICATIONS }, jobDoesntExistMsg } = require('../constants')
 const User = require('../models/user')
 const { getJob } = require('../helpers/queue')
+const { newNotifications } = require('../notifications')
 const { createJob } = require('./index')
 
 /**
@@ -83,20 +84,9 @@ async function processFetchNotifications(job, done) {
   // Parse and send push notifications
   job.progress(2, JOB_STEPS)
   const { data: notifications } = response
-  notifications.forEach(notification => {
-    const {
-      repository: { name, full_name: fullName },
-      subject: { title, url, latest_comment_url, type },
-      reason,
-      // url: notificationThreadUrl,
-    } = notification
-    const isNewIssueOrPr = url === latest_comment_url
-    const isComment = !isNewIssueOrPr
-    console.log('notification', { name, fullName, title, type, reason, isNewIssueOrPr, url });
-    // console.log('notification', { name, fullName, title, url, latest_comment_url, type, reason, notificationThreadUrl });
-  })
-  console.log('[JOB] Notifications', notifications.length)
+  newNotifications(user._id, notifications)
   job.progress(3, JOB_STEPS)
+  // console.log('[JOB] Notifications', notifications.length)
   done()
 }
 
