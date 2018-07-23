@@ -75,7 +75,8 @@ async function processFetchNotifications(job, done) {
     job.progress(JOB_STEPS, JOB_STEPS)
     const response = err.response || {}
     const headers = { 'last-modified': ifModifiedSince, ...response.headers = {} }
-    console.log('headers', headers)
+    job.log('headers', headers)
+    job.log('error:', err)
     if (response.status == 304) {
       rescheduleFetchNotifications(user, headers)
       return done()
@@ -84,7 +85,6 @@ async function processFetchNotifications(job, done) {
       return done(err)
     }
     rescheduleFetchNotifications(user, headers)
-    job.log('error:', error)
     return done(err)
   }
   rescheduleFetchNotifications(user, response.headers)
