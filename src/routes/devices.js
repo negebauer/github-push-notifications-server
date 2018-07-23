@@ -1,4 +1,5 @@
 const Router = require('koa-router')
+const _ = require('lodash')
 
 const router = new Router()
 
@@ -13,7 +14,8 @@ router.get('/', ctx => {
 router.post('/', async ctx => {
   const { user } = ctx.state
   const { body } = ctx.request
-  let device = user.devices.filter(device => device.uid === body.uid)[0]
+  const { token, uid } = body
+  let device = user.devices.filter(device => device.uid === uid)[0]
   if (!device) {
     device = user.devices.create(body)
     user.devices.push(device)
@@ -21,7 +23,7 @@ router.post('/', async ctx => {
     _.merge(device, body)
   }
   await user.save()
-  return ctx.body = device
+  return ctx.body = { message: `Registered device`, token }
 })
 
 router.delete('/:id', async ctx => {
