@@ -16,4 +16,6 @@ app.use(logger('dev'))
 app.use(bodyParser())
 app.use(router.routes())
 
+process.on('warning', e => console.warn(e.stack))
+
 module.exports = app
