@@ -15,6 +15,4 @@ app.use(logger('dev'))
 app.use(bodyParser())
 app.use(router.routes())
 
-console.log('NODE_ENV', process.NODE_ENV);
-
 module.exports = app

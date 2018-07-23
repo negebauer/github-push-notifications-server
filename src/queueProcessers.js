@@ -1,6 +1,7 @@
 const kue = require('kue')
 const queue = require('./queue')
 const { getJob } = require('./helpers/queue')
+const { DEACTIVATE_FETCH_NOTIFICATIONS } = require('./constants')
 
 const {
   QUEUE_JOBS: {
@@ -24,7 +25,7 @@ async function startupMaintenance() {
     new Promise(res => queue.inactive((err,ids) => res(forceStart(err, ids)))),
     new Promise(res => queue.active((err,ids) => res(forceStart(err, ids)))),
   ])
-  await createMissingFetchNotificationsJobs()
+  if (!DEACTIVATE_FETCH_NOTIFICATIONS) await createMissingFetchNotificationsJobs()
 }
 
 startupMaintenance()

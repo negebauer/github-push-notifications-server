@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const axios = require('axios')
 const User = require('../models/user')
+const { DEACTIVATE_FETCH_NOTIFICATIONS } = require('../constants')
 const { checkFetchNotifications } = require('../queueTasks/fetchNotifications')
 
 const router = new Router()
@@ -17,7 +18,7 @@ router.post('/', async ctx => {
     await user.save()
   }
   await user.update({ email, name, token, avatarUrl })
-  checkFetchNotifications(user)
+  if (!DEACTIVATE_FETCH_NOTIFICATIONS) checkFetchNotifications(user)
 
   const { _id } = user
   return ctx.body = { _id, username, name, token, avatarUrl }
