@@ -52,7 +52,7 @@ function messageForNotification(notification) {
     ? `${fullName}#${id}`
     : `${fullName}`
   const messageBody = apiUrl === latest_comment_url
-    ? `new ${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
+    ? `${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
     : `commented ${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
   return `${messageInit}: ${messageBody} ${NOTIFICATION_REASONS[reason]}`
 }
