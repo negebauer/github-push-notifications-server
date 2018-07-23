@@ -66,11 +66,12 @@ async function processFetchNotifications(job, done) {
   try {
     response = await axios(notificationsUrl, { headers: { 'If-Modified-Since': ifModifiedSince || '' } })
   } catch (err) {
+    const headers = { 'last-modified': ifModifiedSince, ...err.response.headers }
     if (err.response.status == 304) {
-      rescheduleFetchNotifications(user, err.response.headers)
+      rescheduleFetchNotifications(user, headers)
       return done()
     }
-    rescheduleFetchNotifications(user, { 'last-modified': ifModifiedSince })
+    rescheduleFetchNotifications(user, headers)
     return done(err)
   }
   rescheduleFetchNotifications(user, response.headers)
