@@ -56,28 +56,30 @@ function rescheduleFetchNotifications(user, responseHeaders) {
   createFetchNotifications(user, { delay, lastModified })
 }
 
-const JOB_STEPS = 3
-
 /**
  *  Calls the github api to retrieve notifications
  *  @author @negebauer
  */
 async function processFetchNotifications(job, done) {
+  job.log('processFetchNotifications')
   // Retrieve data
   const { username, lastModified: ifModifiedSince } = job.data
+  job.log('retrieved user data')
   const user = await User.findOne({ username })
-  if (user.jobId > job.id) return
-  job.progress(1, JOB_STEPS)
+  job.log('retrieved user')
+  if (user.jobId > job.id) {
+    job.log('user.jobId > job.id')
+    return done()
+  }
 
   // Call github notifications api and reschedule next fetch
   const notificationsUrl = `https://api.github.com/notifications?access_token=${user.token}`
   let response
   try {
     response = await axios(notificationsUrl, { headers: { 'If-Modified-Since': ifModifiedSince || '' } })
-    job.log('headers:', response.headers)
-    job.log('data:', response.data)
+    job.log('called github api')
   } catch (err) {
-    job.progress(JOB_STEPS, JOB_STEPS)
+    job.log('failed github api')
     const response = err.response || {}
     const headers = { 'last-modified': ifModifiedSince, ...response.headers = {} }
     job.log('headers', headers)
@@ -93,12 +95,12 @@ async function processFetchNotifications(job, done) {
     return done(err)
   }
   rescheduleFetchNotifications(user, response.headers)
+  job.log('rescheduleFetchNotifications')
 
   // Parse and send push notifications
-  job.progress(2, JOB_STEPS)
   const { data: notifications } = response
   newNotifications(user._id, notifications)
-  job.progress(3, JOB_STEPS)
+  job.log('sentNotifications')
   // console.log('[JOB] Notifications', notifications.length)
   done()
 }
