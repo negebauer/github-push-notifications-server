@@ -42,6 +42,11 @@ async function createFetchNotifications(user, params = {}) {
   return job
 }
 
+async function recreateFetchNotifications({ username, lastModified, delay }) {
+  const user = await User.findOne({ username })
+  createFetchNotifications(user, { lastModified, delay })
+}
+
 function rescheduleFetchNotifications(user, responseHeaders) {
   const {
     'x-poll-interval': delaySeconds,
@@ -116,6 +121,7 @@ async function createMissingFetchNotificationsJobs() {
 
 module.exports = {
   checkFetchNotifications,
+  recreateFetchNotifications,
   processFetchNotifications,
   createMissingFetchNotificationsJobs
 }

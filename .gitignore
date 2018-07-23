@@ -1,5 +1,6 @@
 *.pem
-.envrc
+*.envrc
+*.env
 
 # Logs
 logs
