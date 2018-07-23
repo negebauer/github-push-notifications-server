@@ -8,6 +8,7 @@ const router = require('./routes')
 require('./db')
 require('./queue')
 require('./queueProcessers')
+require('./notifications')
 
 const app = new Koa()
 app.use(cors())
