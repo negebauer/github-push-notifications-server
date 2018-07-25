@@ -14,7 +14,6 @@
     "REDIS_PORT": "@github-push-notifications-server-redis-port",
     "REDIS_PASSWORD": "@github-push-notifications-server-redis-password",
     "NODE_ENV": "production",
-    "RELEASE": "$(git rev-list --count master)",
     "IOS_NOTIFICATIONS_PEM_DEVELOPMENT": "@github-push-notifications-server-ios-notifications-pem-development",
     "IOS_NOTIFICATIONS_PEM_PRODUCTION": "@github-push-notifications-server-ios-notifications-pem-production",
     "SENTRY_URL": "@github-push-notifications-server-sentry-url"
