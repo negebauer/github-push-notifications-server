@@ -16,17 +16,17 @@ const {
 const NODE_ENV = NODE_ENV_RAW || 'development'
 
 module.exports = {
-  PORT,
+  PORT: PORT || 3000,
   DEACTIVATE_FETCH_NOTIFICATIONS,
   IOS_NOTIFICATIONS_PEM_DEVELOPMENT,
   IOS_NOTIFICATIONS_PEM_PRODUCTION,
   DB_USER,
   DB_PASSWORD,
-  DB_HOST,
-  DB_NAME,
-  REDIS_PORT,
-  REDIS_HOST,
-  REDIS_PASSWORD,
+  DB_HOST: DB_HOST || 'localhost:27017',
+  DB_NAME: DB_NAME || 'github-push-notifications-server',
+  REDIS_PORT: REDIS_PORT || 6379,
+  REDIS_HOST: REDIS_HOST || 'localhost',
+  REDIS_PASSWORD: REDIS_PASSWORD || '',
 
   NODE_ENV,
   PRODUCTION: NODE_ENV === 'production',

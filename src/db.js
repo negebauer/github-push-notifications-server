@@ -3,8 +3,8 @@ const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = require('./env')
 
 mongoose.Promise = global.Promise
 
-const dbHost = DB_HOST || 'localhost:27017'
-const dbName = DB_NAME || 'github-push-notifications-server'
+const dbHost = DB_HOST
+const dbName = DB_NAME
 const dbAuth = DB_USER && DB_PASSWORD ? `${DB_USER}:${DB_PASSWORD}@` : ''
 const URI = `mongodb://${dbAuth}${dbHost}/${dbName}`
 
