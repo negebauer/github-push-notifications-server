@@ -1,4 +1,5 @@
 const axios = require('axios').create({ timeout: 5000 })
+const raven = require('raven')
 const { QUEUE_JOBS: { FETCH_NOTIFICATIONS } } = require('../constants')
 const User = require('../models/user')
 const { jobDoesntExistMsg } = require('../helpers/jobs')
@@ -21,6 +22,7 @@ async function checkFetchNotifications(user) {
     if (err.message === jobDoesntExistMsg(jobId)) {
       return createFetchNotifications(user)
     }
+    raven.captureException(err)
     return console.error('[ERR] checkFetchNotifications', err);
   }
 }
@@ -93,6 +95,7 @@ async function processFetchNotifications(job, done) {
       return done(err)
     }
     rescheduleFetchNotifications(user, headers)
+    raven.captureException(err)
     return done(err)
   }
   rescheduleFetchNotifications(user, response.headers)
@@ -117,6 +120,7 @@ async function createMissingFetchNotificationsJobs() {
         await getJob(jobId)
       } catch (err) {
         if (err.message === jobDoesntExistMsg(jobId)) return createFetchNotifications(user)
+        raven.captureException(err)
       }
     }
   }))

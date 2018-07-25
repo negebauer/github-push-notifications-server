@@ -25,7 +25,8 @@
     "kue": "^0.11.6",
     "lodash": "^4.17.10",
     "mongoose": "^5.2.4",
-    "node-gcm": "^1.0.2"
+    "node-gcm": "^1.0.2",
+    "raven": "^2.6.3"
   },
   "devDependencies": {
     "nodemon": "^1.18.3"
