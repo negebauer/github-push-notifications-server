@@ -1,10 +1,11 @@
 const kue = require('kue')
+const { REDIS_PORT, REDIS_HOST, REDIS_PASSWORD } = require('./env')
 
 const redisConfig = {
   redis: {
-    port: process.env.REDIS_PORT || 6379,
-    host: process.env.REDIS_HOST || 'localhost',
-    auth: process.env.REDIS_PASSWORD || '',
+    port: REDIS_PORT || 6379,
+    host: REDIS_HOST || 'localhost',
+    auth: REDIS_PASSWORD || '',
     options: {
       no_ready_check: false,
     },

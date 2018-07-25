@@ -1,7 +1,7 @@
 const kue = require('kue')
 const queue = require('./queue')
 const { getJob } = require('./helpers/queue')
-const { DEACTIVATE_FETCH_NOTIFICATIONS } = require('./constants')
+const { DEACTIVATE_FETCH_NOTIFICATIONS } = require('./env')
 
 const {
   QUEUE_JOBS: {

@@ -4,11 +4,11 @@ const gcm = require('node-gcm')
 const keyMirror = require('keymirror')
 const User = require('./models/user')
 const {
-  ENV,
+  NODE_ENV,
   PRODUCTION,
   IOS_NOTIFICATIONS_PEM_DEVELOPMENT,
   IOS_NOTIFICATIONS_PEM_PRODUCTION,
-} = require('./constants')
+} = require('./env')
 const { messageForNotification, urlForNotification } = require('./helpers/notification')
 
 function loadApnCertificateFromEnv() {
@@ -21,7 +21,7 @@ function loadApnCertificateFromEnv() {
 
 const apnCertificate = IOS_NOTIFICATIONS_PEM_DEVELOPMENT && IOS_NOTIFICATIONS_PEM_PRODUCTION
   ? loadApnCertificateFromEnv()
-  : `./certificates/${ENV}_com.negebauer.GithubPushNotificationsMobile.pem`
+  : `./certificates/${NODE_ENV}_com.negebauer.GithubPushNotificationsMobile.pem`
 
 const optionsApn = {
   cert: apnCertificate,
