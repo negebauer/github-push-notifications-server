@@ -12,13 +12,20 @@ const API_NOTIFICATION_TYPE = keyMirror({
   PullRequest: undefined,
   Commit: undefined,
   Issue: undefined,
+  RepositoryVulnerabilityAlert: undefined,
 })
 
 const API_NOTIFICATION_TYPE_TO_MESSAGE = {
   [API_NOTIFICATION_TYPE.PullRequest]: 'pull request',
   [API_NOTIFICATION_TYPE.Commit]: 'commit',
   [API_NOTIFICATION_TYPE.Issue]: 'issue',
+  [API_NOTIFICATION_TYPE.RepositoryVulnerabilityAlert]: 'security alert',
 }
+
+const API_NOTIFICATION_TYPES_WITH_ID = [
+  API_NOTIFICATION_TYPE.PullRequest,
+  API_NOTIFICATION_TYPE.Issue,
+]
 
 const NOTIFICATION_REASONS = {
   // You were assigned to the Issue.
@@ -39,6 +46,10 @@ const NOTIFICATION_REASONS = {
   subscribed:	'in repo that you\'re watching',
   // You were on a team that was mentioned.
   team_mention:	'that your team was mentioned',
+  // You were requested for a review
+  review_requested: 'that you were requested to review',
+  // A securiy alert was triggered
+  security_alert: '',
 }
 
 function messageForNotification(notification) {
@@ -48,13 +59,18 @@ function messageForNotification(notification) {
     reason,
   } = notification
   let [ empty, endpoint, id ] = apiUrl.split(fullName)[1].split('/')
-  const messageInit = type !== API_NOTIFICATION_TYPE.Commit
+  const messageInit = API_NOTIFICATION_TYPES_WITH_ID.indexOf(type) >= 0
     ? `${fullName}#${id}`
     : `${fullName}`
   const messageBody = apiUrl === latest_comment_url
     ? `${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
     : `commented ${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
-  return `${messageInit}: ${messageBody} ${NOTIFICATION_REASONS[reason]} - ${title}`
+  const messageReason = NOTIFICATION_REASONS[reason]
+    ? ` ${NOTIFICATION_REASONS[reason]}`
+    : ''
+  const message = `${messageInit}: ${messageBody}${messageReason} - ${title}`
+  console.log('messageForNotification', message);
+  return message
 }
 
 function urlForNotification(notification) {
