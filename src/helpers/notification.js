@@ -54,7 +54,7 @@ function messageForNotification(notification) {
   const messageBody = apiUrl === latest_comment_url
     ? `${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
     : `commented ${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
-  return `${messageInit}: ${messageBody} ${NOTIFICATION_REASONS[reason]}`
+  return `${messageInit}: ${messageBody} ${NOTIFICATION_REASONS[reason]} - ${title}`
 }
 
 function urlForNotification(notification) {
