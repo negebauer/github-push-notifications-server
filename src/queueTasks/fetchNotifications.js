@@ -1,6 +1,7 @@
 const axios = require('axios').create({ timeout: 5000 })
-const { QUEUE_JOBS: { FETCH_NOTIFICATIONS }, jobDoesntExistMsg } = require('../constants')
+const { QUEUE_JOBS: { FETCH_NOTIFICATIONS } } = require('../constants')
 const User = require('../models/user')
+const { jobDoesntExistMsg } = require('../helpers/jobs')
 const { getJob } = require('../helpers/queue')
 const { newNotifications } = require('../notifications')
 const { createJob } = require('./index')
