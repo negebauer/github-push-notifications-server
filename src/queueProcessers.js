@@ -1,4 +1,5 @@
 const kue = require('kue')
+const raven = require('raven')
 const queue = require('./queue')
 const { getJob } = require('./helpers/queue')
 const { DEACTIVATE_FETCH_NOTIFICATIONS } = require('./env')
@@ -32,7 +33,7 @@ function forceStart(err, ids) {
     //   recreateFetchNotifications(job.data)
     //   job.remove()
     // }
-  })).catch(() => {})
+  })).catch(err => raven.captureException(err))
 }
 
 async function startupMaintenance() {
