@@ -10,8 +10,15 @@ router.post('/', async ctx => {
   const { token } = ctx.request.body
 
   const profileUrl = `https://api.github.com/user?access_token=${token}`
-  const { data: { email, name, login: username, avatar_url: avatarUrl } } = await axios.get(profileUrl)
+  let response
+  try {
+    response = await axios.get(profileUrl)
+  } catch (err) {
+    if (err.response.status === 401) return ctx.throw(401, 'Bad credentials')
+    else ctx.throw()
+  }
 
+  const { data: { email, name, login: username, avatar_url: avatarUrl } } = response
   let user = await User.findOne({ username })
   if (!user) {
     user = new User({ username })
