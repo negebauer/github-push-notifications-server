@@ -26,7 +26,7 @@ const apnCertificate = IOS_NOTIFICATIONS_PEM_DEVELOPMENT && IOS_NOTIFICATIONS_PE
 const optionsApn = {
   cert: apnCertificate,
   key: apnCertificate,
-  production: false,
+  production: PRODUCTION,
 }
 
 const providerApn = new apn.Provider(optionsApn)
@@ -119,12 +119,12 @@ const NOTIFICATION_TYPE = keyMirror({
 const Notification = {
   newNotifications: async (userId, notifications) => {
     const devices = await getDevices(userId)
-    return Promise.all[notifications.map(notification => {
+    return Promise.all(notifications.map(notification => {
       const message = messageForNotification(notification)
       const url = urlForNotification(notification)
       const payload = { url, type: NOTIFICATION_TYPE.NEW_NOTIFICATION }
-      return notify(devices, message, payload)
-    })]
+      return Promise.all(notify(devices, message, payload))
+    }))
   },
 }
 
