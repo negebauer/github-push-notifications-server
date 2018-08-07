@@ -10,6 +10,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "deploy": "now rm -y github-push-notifications-server; now --public && now alias",
+    "deploy:ci": "now rm -y --token $NOW_TOKEN github-push-notifications-server; now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN",
     "kue-ui-dev": "kue-dashboard -p 3001",
     "kue-ui-prod": "kue-dashboard -p 3002 -r redis://${KUE_UI_PASSWORD}@${KUE_UI_HOST}:${KUE_UI_PORT}"
   },

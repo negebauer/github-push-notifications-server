@@ -37,8 +37,7 @@ jobs:
       - attach_workspace:
           at: ~/github-push-notifications-server
       - run: sudo npm install -g --unsafe-perm now
-      - run: now --token $NOW_TOKEN
-      - run: yarn deploy
+      - run: yarn deploy:ci
 
 workflows:
   version: 2
