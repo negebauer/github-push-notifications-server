@@ -47,7 +47,7 @@ async function startupMaintenance() {
   await Promise.all([
     new Promise(res => queue.inactive((err,ids) => res(forceStart(err, ids)))),
     new Promise(res => queue.active((err,ids) => res(forceStart(err, ids)))),
-    new Promise(res => queue.failed((err, ids) => res(clearFailed(err, ids))),
+    new Promise(res => queue.failed((err, ids) => res(clearFailed(err, ids)))),
   ])
   if (!DEACTIVATE_FETCH_NOTIFICATIONS) await createMissingFetchNotificationsJobs()
 }
