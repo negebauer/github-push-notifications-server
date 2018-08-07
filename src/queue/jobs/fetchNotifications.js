@@ -1,11 +1,11 @@
 const axios = require('axios').create({ timeout: 5000 })
 const raven = require('raven')
-const { QUEUE_JOBS: { FETCH_NOTIFICATIONS } } = require('../constants')
-const User = require('../models/user')
-const { jobDoesntExistMsg } = require('../helpers/jobs')
-const { getJob } = require('../helpers/queue')
-const { newNotifications } = require('../notifications')
-const { createJob } = require('./index')
+const { QUEUE_JOBS: { FETCH_NOTIFICATIONS } } = require('../../constants')
+const User = require('../../models/user')
+const { jobDoesntExistMsg } = require('../../helpers/jobs')
+const { getJob } = require('../../helpers/queue')
+const { newNotifications } = require('../../notifications')
+const createJob = require('../createJob')
 
 /**
  *  Called when a user performs a login. Decides

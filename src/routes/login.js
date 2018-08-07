@@ -2,7 +2,7 @@ const Router = require('koa-router')
 const axios = require('axios')
 const User = require('../models/user')
 const { DEACTIVATE_FETCH_NOTIFICATIONS } = require('../env')
-const { checkFetchNotifications } = require('../queueTasks/fetchNotifications')
+const { checkFetchNotifications } = require('../queue/jobs/fetchNotifications')
 
 const router = new Router()
 

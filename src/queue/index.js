@@ -1,5 +1,5 @@
 const kue = require('kue')
-const { REDIS_PORT, REDIS_HOST, REDIS_PASSWORD } = require('./env')
+const { REDIS_PORT, REDIS_HOST, REDIS_PASSWORD } = require('../env')
 
 const redisConfig = {
   redis: {

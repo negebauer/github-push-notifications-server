@@ -9,7 +9,7 @@ const { SENTRY_URL, NODE_ENV } = require('./env')
 const router = require('./routes')
 require('./db')
 require('./queue')
-require('./queueProcessers')
+require('./queue/configHandlers')
 require('./notifications')
 
 raven.config(SENTRY_URL, { release: NODE_ENV }).install()

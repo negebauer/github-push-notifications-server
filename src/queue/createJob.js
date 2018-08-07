@@ -1,7 +1,7 @@
-const queue = require('../queue')
+const queue = require('./')
 const { QUEUE_JOB_PRIORITY } = require('../constants')
 
-const createJob = async (type, data, options = {}) => {
+async function createJob(type, data, options = {}) {
   const { priority, removeOnComplete, delay } = options
   return new Promise((res, rej) => {
     const job = queue
@@ -17,4 +17,4 @@ const createJob = async (type, data, options = {}) => {
   })
 }
 
-module.exports = { createJob }
+module.exports = createJob

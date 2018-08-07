@@ -1,19 +1,19 @@
 const kue = require('kue')
 const raven = require('raven')
-const queue = require('./queue')
-const { getJob } = require('./helpers/queue')
-const { DEACTIVATE_FETCH_NOTIFICATIONS } = require('./env')
+const queue = require('./')
+const { getJob } = require('../helpers/queue')
+const { DEACTIVATE_FETCH_NOTIFICATIONS } = require('../env')
 
 const {
   QUEUE_JOBS: {
     FETCH_NOTIFICATIONS,
   },
-} = require('./constants')
+} = require('../constants')
 const {
   processFetchNotifications,
   createMissingFetchNotificationsJobs,
   recreateFetchNotifications,
-} = require('./queueTasks/fetchNotifications')
+} = require('./jobs/fetchNotifications')
 
 const CONCURRENCY = {
   [FETCH_NOTIFICATIONS]: 10
