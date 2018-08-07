@@ -98,14 +98,14 @@ function handleError({ job, err, user, ifModifiedSince, done})  {
   const headers = { 'last-modified': ifModifiedSince, ...response.headers = {} }
   job.log('headers', headers)
   job.log('error:', err)
-  if (response.status == 304) {
+  if (response.status === 304) {
     rescheduleFetchNotifications(user, headers)
     return done()
+  } else if (response.status === 403 ) {
+    unauthorizedToken(user._id)
+    return done(err)
   } else if (err.code === 'ECONNABORTED') {
     rescheduleFetchNotifications(user, headers)
-    return done(err)
-  } else if (err.status === 403 ) {
-    unauthorizedToken(user._id)
     return done(err)
   }
   rescheduleFetchNotifications(user, headers)
