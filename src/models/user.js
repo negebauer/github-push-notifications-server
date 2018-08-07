@@ -18,6 +18,7 @@ const Device = new Schema({
   systemVersion: String,
   timezone: String,
   uid: String,
+  version: String,
 })
 
 const model = 'user'
