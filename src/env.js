@@ -12,6 +12,7 @@ const {
   REDIS_HOST,
   REDIS_PASSWORD,
   SENTRY_URL,                         // Sentry DSN for error reporting
+  FCM_KEY,
 } = process.env
 
 const NODE_ENV = NODE_ENV_RAW || 'development'
@@ -29,6 +30,7 @@ module.exports = {
   REDIS_HOST: REDIS_HOST || 'localhost',
   REDIS_PASSWORD: REDIS_PASSWORD || '',
   SENTRY_URL,
+  FCM_KEY,
 
   NODE_ENV,
   PRODUCTION: NODE_ENV === 'production',

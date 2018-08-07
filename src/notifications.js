@@ -45,16 +45,16 @@ function notificationApn(alert, payload = {}) {
   })
 }
 
-function notificationGcm(alert, payload = {}) {
+function notificationGcm(alert, token, payload = {}) {
   return new gcm.Message({
-    contentAvailable: true,
-    delayWhileIdle: true,
+    priority: 'high',
     restrictedPackageName: 'com.negebauer.GithubPushNotificationsMobile',
-    data: { payload },
+    data: payload,
     notification: {
       title: 'Github Push',
       icon: 'ic_launcher',
       body: alert,
+      sound: 'default',
     },
   })
 }
@@ -64,13 +64,19 @@ function notifyApn(token, alert, payload) {
 }
 
 async function notifyGcm(token, alert, payload) {
-  return new Promise((res, rej) =>
-    providerGcm.send(
-      notificationGcm(alert, payload),
-      { registrationTokens: Array.isArray(token) ? token : [token] },
-      (err, response) => (err ? rej(err) : res(response))
-    )
-  ).catch(raven.captureException)
+  return new Promise((res, rej) => {
+    function handler(err, response) {
+      if (err) return rej(err)
+      res(response)
+    }
+    return providerGcm.send(notificationGcm(alert, token, payload), { to: token }, handler)
+  })
+  .then(response => {
+    console.log('response', response);
+  })
+  .catch(err => {
+    console.log('err', err);
+  })
 }
 
 function notifyMultiple(devices, alert, payload) {
