@@ -69,13 +69,7 @@ async function notifyGcm(token, alert, payload) {
       res(response)
     }
     return providerGcm.send(notificationGcm(alert, token, payload), { to: token }, handler)
-  })
-  .then(response => {
-    console.log('response', response);
-  })
-  .catch(err => {
-    console.log('err', err);
-  })
+  }).catch(raven.captureException)
 }
 
 function notifyMultiple(devices, alert, payload) {
