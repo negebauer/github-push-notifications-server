@@ -36,9 +36,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/github-push-notifications-server
-      - run: yarn deploy
       - run: npm install -g now
       - run: now --token $NOW_TOKEN
+      - run: yarn deploy
 
 workflows:
   version: 2
