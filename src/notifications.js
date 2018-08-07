@@ -55,6 +55,7 @@ function notificationGcm(alert, token, payload = {}) {
       icon: 'ic_launcher',
       message: alert,
       sound: 'default',
+    }
   })
 }
 
