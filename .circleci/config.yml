@@ -5,6 +5,7 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/github-push-notifications-server
     docker:
       - image: circleci/node:9.2
     steps:
@@ -28,6 +29,7 @@ jobs:
             - node_modules
 
   deploy:
+    working_directory: ~/github-push-notifications-server
     docker:
       - image: circleci/node:9.2
     steps:
