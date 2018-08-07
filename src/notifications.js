@@ -51,7 +51,6 @@ function notificationGcm(alert, token, payload = {}) {
     restrictedPackageName: 'com.negebauer.GithubPushNotificationsMobile',
     data: {
       data: payload,
-      title: 'Github Push',
       icon: 'ic_launcher',
       message: alert,
       sound: 'default',
