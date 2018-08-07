@@ -38,7 +38,7 @@ function notificationApn(alert, payload = {}) {
     badge: 0,
     sound: 'ping.aiff',
     alert,
-    payload,
+    payload: { payload },
     topic: 'com.negebauer.GithubPushNotificationsMobile',
     contentAvailable: true,
     priority: 10,
@@ -49,13 +49,12 @@ function notificationGcm(alert, token, payload = {}) {
   return new gcm.Message({
     priority: 'high',
     restrictedPackageName: 'com.negebauer.GithubPushNotificationsMobile',
-    data: { data: payload },
-    notification: {
+    data: {
+      data: payload,
       title: 'Github Push',
       icon: 'ic_launcher',
-      body: alert,
+      message: alert,
       sound: 'default',
-    },
   })
 }
 
