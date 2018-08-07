@@ -1,6 +1,7 @@
 *.pem
 *.envrc
 *.env
+gcm.json
 
 # Logs
 logs

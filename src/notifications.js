@@ -1,6 +1,5 @@
 const apn = require('apn')
 const gcm = require('node-gcm')
-// const gcmKey = require('../certificates/gcm.json').key
 const keyMirror = require('keymirror')
 const User = require('./models/user')
 const {
@@ -8,6 +7,7 @@ const {
   PRODUCTION,
   IOS_NOTIFICATIONS_PEM_DEVELOPMENT,
   IOS_NOTIFICATIONS_PEM_PRODUCTION,
+  FCM_KEY,
 } = require('./env')
 const { messageForNotification, urlForNotification } = require('./helpers/notification')
 
@@ -30,7 +30,7 @@ const optionsApn = {
 }
 
 const providerApn = new apn.Provider(optionsApn)
-// const providerGcm = new gcm.Sender(gcmKey)
+const providerGcm = new gcm.Sender(FCM_KEY)
 
 function notificationApn(alert, payload = {}) {
   return new apn.Notification({
@@ -44,42 +44,33 @@ function notificationApn(alert, payload = {}) {
   })
 }
 
-function notificationGcm() {
-  return Promise.resolve()
+function notificationGcm(alert, payload = {}) {
+  return new gcm.Message({
+    contentAvailable: true,
+    delayWhileIdle: true,
+    restrictedPackageName: 'com.negebauer.GithubPushNotificationsMobile',
+    data: { payload },
+    notification: {
+      title: 'Github Push',
+      icon: 'ic_launcher',
+      body: alert,
+    },
+  })
 }
-
-// const notificationGcm = (alert, payload = {}) =>
-//   new gcm.Message({
-//     priority: 'high',
-//     contentAvailable: true,
-//     delayWhileIdle: true,
-//     restrictedPackageName: 'com.negebauer.GithubPushNotificationsMobile',
-//     data: { payload },
-//     notification: {
-//       title: 'Github Push',
-//       icon: 'ic_launcher',
-//       body: alert,
-//     },
-//   })
 
 function notifyApn(token, alert, payload) {
   return providerApn.send(notificationApn(alert, payload), token)
 }
 
-function notifyGcm() {
-  return {}
+async function notifyGcm(token, alert, payload) {
+  return new Promise((res, rej) =>
+    providerGcm.send(
+      notificationGcm(alert, payload),
+      { registrationTokens: Array.isArray(token) ? token : [token] },
+      (err, response) => (err ? rej(err) : res(response))
+    )
+  )
 }
-
-// const notifyGcm = async (token, alert, payload) =>
-//   new Promise((res, rej) =>
-//     providerGcm.send(
-//       notificationGcm(alert, payload),
-//       {
-//         registrationTokens: Array.isArray(token) ? token : [token],
-//       },
-//       (err, response) => (err ? rej(err) : res(response))
-//     )
-//   )
 
 function notifyMultiple(devices, alert, payload) {
   return devices.map(device => notifyDevice(device, alert, payload))
@@ -88,8 +79,6 @@ function notifyMultiple(devices, alert, payload) {
 function notifyDevice(device, alert, payload) {
   const { token, deviceName, systemName } = device
   if (!token) return
-  // eslint-disable-next-line no-console
-  // console.log('notify', payload.type, token, deviceName)
   return systemName === 'iOS'
     ? notifyApn(token, alert, payload)
     : notifyGcm(token, alert, payload)

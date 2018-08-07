@@ -16,6 +16,7 @@
     "NODE_ENV": "production",
     "IOS_NOTIFICATIONS_PEM_DEVELOPMENT": "@github-push-notifications-server-ios-notifications-pem-development",
     "IOS_NOTIFICATIONS_PEM_PRODUCTION": "@github-push-notifications-server-ios-notifications-pem-production",
-    "SENTRY_URL": "@github-push-notifications-server-sentry-url"
+    "SENTRY_URL": "@github-push-notifications-server-sentry-url",
+    "FCM_KEY": "@github-push-notifications-server-fcm-key"
   }
 }
