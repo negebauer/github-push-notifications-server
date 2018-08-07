@@ -82,33 +82,35 @@ async function processFetchNotifications(job, done) {
     response = await axios(notificationsUrl, { headers: { 'If-Modified-Since': ifModifiedSince || '' } })
     job.log('called github api')
   } catch (err) {
-    job.log('failed github api')
-    const response = err.response || {}
-    const headers = { 'last-modified': ifModifiedSince, ...response.headers = {} }
-    job.log('headers', headers)
-    job.log('error:', err)
-    if (response.status == 304) {
-      rescheduleFetchNotifications(user, headers)
-      return done()
-    } else if (err.code === 'ECONNABORTED') {
-      rescheduleFetchNotifications(user, headers)
-      return done(err)
-    } else if (err.stats === 403 ) {
-      unauthorizedToken(user._id)
-      return done(err)
-    }
-    rescheduleFetchNotifications(user, headers)
-    raven.captureException(err)
-    return done(err)
+    return handleFetchNotificationsError(err, user)
   }
   rescheduleFetchNotifications(user, response.headers)
   job.log('rescheduleFetchNotifications')
-
-  // Parse and send push notifications
   const { data: notifications } = response
   newNotifications(user._id, notifications)
   job.log('sentNotifications')
   done()
+}
+
+function handleFetchNotificationsError(err, user) {
+  job.log('failed github api')
+  const response = err.response || {}
+  const headers = { 'last-modified': ifModifiedSince, ...response.headers = {} }
+  job.log('headers', headers)
+  job.log('error:', err)
+  if (response.status == 304) {
+    rescheduleFetchNotifications(user, headers)
+    return done()
+  } else if (err.code === 'ECONNABORTED') {
+    rescheduleFetchNotifications(user, headers)
+    return done(err)
+  } else if (err.status === 403 ) {
+    unauthorizedToken(user._id)
+    return done(err)
+  }
+  rescheduleFetchNotifications(user, headers)
+  raven.captureException(err)
+  return done(err)
 }
 
 async function createMissingFetchNotificationsJobs() {
