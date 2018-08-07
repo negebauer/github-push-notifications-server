@@ -36,7 +36,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/github-push-notifications-server
-      - run: npm install -g now
+      - run: sudo npm install -g now
       - run: now --token $NOW_TOKEN
       - run: yarn deploy
 
