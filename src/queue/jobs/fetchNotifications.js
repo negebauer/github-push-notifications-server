@@ -4,7 +4,7 @@ const { QUEUE_JOBS: { FETCH_NOTIFICATIONS } } = require('../../constants')
 const User = require('../../models/user')
 const { jobDoesntExistMsg } = require('../../helpers/jobs')
 const { getJob } = require('../../helpers/queue')
-const { newNotifications } = require('../../notifications')
+const { newNotifications, unauthorizedToken } = require('../../notifications')
 const createJob = require('../createJob')
 
 /**
@@ -92,6 +92,9 @@ async function processFetchNotifications(job, done) {
       return done()
     } else if (err.code === 'ECONNABORTED') {
       rescheduleFetchNotifications(user, headers)
+      return done(err)
+    } else if (err.stats === 403 ) {
+      unauthorizedToken(user._id)
       return done(err)
     }
     rescheduleFetchNotifications(user, headers)

@@ -116,6 +116,11 @@ const Notification = {
       return Promise.all(notify(devices, message, payload))
     }))
   },
+  unauthorizedToken: async (userId) => {
+    const devices = await getDevices(userId)
+    const message = 'Your token expired, please open the app again to receive notifications'
+    return notify(devices, message)
+  }
 }
 
 module.exports = Notification
