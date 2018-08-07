@@ -82,7 +82,7 @@ async function processFetchNotifications(job, done) {
     response = await axios(notificationsUrl, { headers: { 'If-Modified-Since': ifModifiedSince || '' } })
     job.log('called github api')
   } catch (err) {
-    return handleFetchNotificationsError(err, user)
+    return handleError({ job, err, user, ifModifiedSince, done })
   }
   rescheduleFetchNotifications(user, response.headers)
   job.log('rescheduleFetchNotifications')
@@ -92,7 +92,7 @@ async function processFetchNotifications(job, done) {
   done()
 }
 
-function handleFetchNotificationsError(err, user) {
+function handleError({ job, err, user, ifModifiedSince, done})  {
   job.log('failed github api')
   const response = err.response || {}
   const headers = { 'last-modified': ifModifiedSince, ...response.headers = {} }
