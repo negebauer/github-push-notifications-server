@@ -10,7 +10,7 @@ const {
   IOS_NOTIFICATIONS_PEM_PRODUCTION,
   FCM_KEY,
 } = require('./env')
-const { messageForNotification, urlForNotification } = require('./helpers/notification')
+const { messageForNotification, urlForNotification } = require('./helpers/githubNotification')
 
 function loadApnCertificateFromEnv() {
   const rawCert = PRODUCTION

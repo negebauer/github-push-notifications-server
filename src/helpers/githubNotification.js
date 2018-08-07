@@ -64,12 +64,11 @@ function messageForNotification(notification) {
     : `${fullName}`
   const messageBody = apiUrl === latest_comment_url
     ? `${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
-    : `commented ${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
+    : `update in ${API_NOTIFICATION_TYPE_TO_MESSAGE[type]}`
   const messageReason = NOTIFICATION_REASONS[reason]
     ? ` ${NOTIFICATION_REASONS[reason]}`
     : ''
   const message = `${messageInit}: ${messageBody}${messageReason} - ${title}`
-  console.log('messageForNotification', message);
   return message
 }
 

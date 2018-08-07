@@ -105,7 +105,6 @@ async function processFetchNotifications(job, done) {
   const { data: notifications } = response
   newNotifications(user._id, notifications)
   job.log('sentNotifications')
-  // console.log('[JOB] Notifications', notifications.length)
   done()
 }
 
