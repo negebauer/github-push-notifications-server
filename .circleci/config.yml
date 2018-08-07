@@ -1,0 +1,59 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:9.2
+    steps:
+      - checkout
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+      - restore_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+      - run: yarn
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: ~/github-push-notifications-server
+          paths:
+            - node_modules
+
+  deploy:
+    docker:
+      - image: circleci/node:9.2
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/github-push-notifications-server
+      - run: yarn deploy
+      - run: npm install -g now
+      - run: now --token $NOW_TOKEN
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: master
