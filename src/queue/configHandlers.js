@@ -36,10 +36,18 @@ function forceStart(err, ids) {
   })).catch(err => raven.captureException(err))
 }
 
+function clearFailed(err, ids) {
+  return Promise.all(ids.map(async id => {
+    const job = await getJob(id)
+    job.remove()
+  })).catch(err => raven.captureException(err))
+}
+
 async function startupMaintenance() {
   await Promise.all([
     new Promise(res => queue.inactive((err,ids) => res(forceStart(err, ids)))),
     new Promise(res => queue.active((err,ids) => res(forceStart(err, ids)))),
+    new Promise(res => queue.failed((err, ids) => res(clearFailed(err, ids))),
   ])
   if (!DEACTIVATE_FETCH_NOTIFICATIONS) await createMissingFetchNotificationsJobs()
 }
