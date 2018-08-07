@@ -22,8 +22,8 @@ const CONCURRENCY = {
 // Assign each queue type to it's processer
 queue.process(FETCH_NOTIFICATIONS, CONCURRENCY[FETCH_NOTIFICATIONS], processFetchNotifications)
 
-const maxListeners = Object.values(CONCURRENCY).reduce((i, t) => i + t)
-queue.setMaxListeners(maxListeners + 1)
+const jobListeners = Object.values(CONCURRENCY).reduce((i, t) => i + t)
+queue.setMaxListeners(queue.getMaxListeners() + jobListeners + 1)
 
 function forceStart(err, ids) {
   return Promise.all(ids.map(async id => {
