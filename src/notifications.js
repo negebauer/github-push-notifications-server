@@ -1,6 +1,7 @@
 const apn = require('apn')
 const gcm = require('node-gcm')
 const keyMirror = require('keymirror')
+const raven = require('raven')
 const User = require('./models/user')
 const {
   NODE_ENV,
@@ -59,7 +60,7 @@ function notificationGcm(alert, payload = {}) {
 }
 
 function notifyApn(token, alert, payload) {
-  return providerApn.send(notificationApn(alert, payload), token)
+  return providerApn.send(notificationApn(alert, payload), token).catch(raven.captureException)
 }
 
 async function notifyGcm(token, alert, payload) {
@@ -69,7 +70,7 @@ async function notifyGcm(token, alert, payload) {
       { registrationTokens: Array.isArray(token) ? token : [token] },
       (err, response) => (err ? rej(err) : res(response))
     )
-  )
+  ).catch(raven.captureException)
 }
 
 function notifyMultiple(devices, alert, payload) {
