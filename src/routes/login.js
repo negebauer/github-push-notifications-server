@@ -1,4 +1,5 @@
 const Router = require('koa-router')
+const raven = require('raven')
 const axios = require('axios')
 const User = require('../models/user')
 const { DEACTIVATE_FETCH_NOTIFICATIONS } = require('../env')
@@ -15,7 +16,8 @@ router.post('/', async ctx => {
     response = await axios.get(profileUrl)
   } catch (err) {
     if (err.response.status === 401) return ctx.throw(401, 'Bad credentials')
-    else ctx.throw()
+    raven.captureException(err)
+    return ctx.throw()
   }
 
   const { data: { email, name, login: username, avatar_url: avatarUrl } } = response
