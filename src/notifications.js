@@ -49,7 +49,7 @@ function notificationGcm(alert, token, payload = {}) {
   return new gcm.Message({
     priority: 'high',
     restrictedPackageName: 'com.negebauer.GithubPushNotificationsMobile',
-    data: payload,
+    data: { payload, data: payload },
     notification: {
       title: 'Github Push',
       icon: 'ic_launcher',
