@@ -38,7 +38,7 @@ function notificationApn(alert, payload = {}) {
     badge: 0,
     sound: 'ping.aiff',
     alert,
-    payload: { payload },
+    payload,
     topic: 'com.negebauer.GithubPushNotificationsMobile',
     contentAvailable: true,
     priority: 10,
