@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  node:
     working_directory: ~/github-push-notifications-server
     docker:
       - image: circleci/node:9.2
@@ -43,7 +43,7 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - build:
+      - node:
           filters:
             branches:
               ignore:
@@ -52,7 +52,7 @@ workflows:
               only: /.*/
       - deploy:
           requires:
-            - build
+            - node
           filters:
             tags:
               only: /.*/
