@@ -4,6 +4,7 @@ const userAuth = require('../helpers/userAuth')
 
 const home = require('./home')
 const login = require('./login')
+const config = require('./config')
 const devices = require('./devices')
 
 const router = new Router()
@@ -16,6 +17,7 @@ router.use('/login', login.routes())
 router.use(userAuth)
 
 // private routes
+router.use('/config', config.routes())
 router.use('/devices', devices.routes())
 
 module.exports = router
