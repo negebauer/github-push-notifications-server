@@ -3,7 +3,6 @@
 const app = require('./src/app')
 const { PORT } = require('./src/env')
 
-
 const port = PORT || 3000
 
 app.listen(port, err => {
