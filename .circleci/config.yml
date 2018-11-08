@@ -41,7 +41,7 @@ jobs:
 
 workflows:
   version: 2
-  workflow:
+  commit:
     jobs:
       - node:
           filters:
